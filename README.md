@@ -20,3 +20,6 @@ Entering `N` will terminate script. Entering `Y` will:
 ## Hosts
 The hosts downloaded are taken from an [actively curated repository](https://github.com/StevenBlack/hosts). They contain addresses of known adware and malware providers.  
 Bear in mind that a large hosts file *may* incur additional processing cost. I personally did not see a noticable difference.
+  
+## Compatibility
+Tested on Windows 10. Should run on Win 7, 8, 8.1 as well.
