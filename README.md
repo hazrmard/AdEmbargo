@@ -16,3 +16,7 @@ Entering `N` will terminate script. Entering `Y` will:
 2. Download new `hosts` file,  
 3. Merge current and new files,  
 4. Copy merged file into `C:\Windows\System32\drivers\etc\hosts`.  
+  
+## Hosts
+The hosts downloaded are taken from an [actively curated repository](https://github.com/StevenBlack/hosts). They contain addresses of known adware and malware providers.  
+Bear in mind that a large hosts file *may* incur additional processing cost. I personally did not see a noticable difference.
