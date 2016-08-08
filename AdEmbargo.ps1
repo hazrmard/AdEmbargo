@@ -13,6 +13,7 @@ If (Test-Path $hosts_backup) {
     If ($ans -eq 'Y') {
         Write-Host 'Restoring backup...'
         Copy-Item -Path $hosts_backup -Destination $hosts_local
+        exit
     }
 }
 $ans = Read-Host 'Proceed with modifying hosts file? [Y/N]'
@@ -26,15 +27,22 @@ Write-Host 'Backing up current hosts file...'
 Copy-Item -Path $hosts_local -Destination $hosts_backup
 
 Write-Host 'Merging hosts...'
-# duplicates code modified from http://www.secretgeek.net/ps_duplicates
 $hash = @{}                     # Define an empty hash table
-Get-Content $hosts_backup, $temp_buff |   # Send the content of the file into the pipeline...
+
+Get-Content $hosts_backup |
+% {
+    $hash.$_ = 1           # hash table of original hosts to prevent duplicates
+    $_
+} > $out_file
+
+Get-Content $temp_buff |
+# duplicates code modified from http://www.secretgeek.net/ps_duplicates
   % {                           # For each object in the pipeline...
-     if ($hash.$_ -eq $null) {
-         $_                     # ... send that line further along the pipe
+     if ($hash.$_ -eq $null) {  # if not in hash table:
+         # Add any other filters on imported hosts list here
+         $_                     #   send that line further along the pipe
      };
-     $hash.$_ = 1               # Add that line to the hash
-  } > $out_file                 # redirect the pipe into a new file.
+  } | Out-File -Append $out_file  # redirect the pipe into a new file.
 
 Copy-Item -Path $out_file -Destination $hosts_local
 
